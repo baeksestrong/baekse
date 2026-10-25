@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>백세튼튼 상품 모음</title>
+<style>
+  :root { --main: #1F6B4A; --accent: #FFD25E; --bg: #FFFDF6; --text: #1A1A1A; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+         font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; font-size: 20px; line-height: 1.5;
+         word-break: keep-all; overflow-wrap: anywhere; }
+  header { background: var(--main); color: #fff; padding: 20px 16px; display: flex; gap: 14px; align-items: center; }
+  header img { width: 56px; height: 56px; border-radius: 12px; border: 3px solid var(--bg); }
+  header h1 { margin: 0; font-size: 26px; }
+  .notice { background: #fff4d6; border-bottom: 2px solid var(--accent); padding: 12px 16px; font-size: 16px; }
+  main { max-width: 640px; margin: 0 auto; padding: 16px; }
+  .search { display: flex; gap: 8px; margin-bottom: 18px; }
+  .search input { flex: 1; font-size: 24px; padding: 12px 14px; border: 3px solid var(--main); border-radius: 12px; min-width: 0; }
+  .search button { font-size: 20px; padding: 0 16px; border: 0; border-radius: 12px; background: var(--main); color: #fff; }
+  .video { background: #fff; border-radius: 16px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 6px rgba(0,0,0,.08); }
+  .video h2 { margin: 0 0 10px; font-size: 26px; color: var(--main); }
+  .item { display: block; text-decoration: none; color: var(--text); background: var(--bg); border: 2px solid var(--main);
+          border-radius: 12px; padding: 14px; margin-top: 10px; font-size: 22px; font-weight: 700; }
+  .item span { display: block; margin-top: 6px; font-size: 18px; color: var(--main); }
+  .empty { text-align: center; padding: 40px 0; font-size: 20px; }
+  footer { text-align: center; font-size: 14px; padding: 20px 16px 40px; color: #555; }
+</style>
+</head>
+<body>
+<header><img src="logo.png" alt=""><h1>백세튼튼 상품 모음</h1></header>
+<div class="notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</div>
+<main>
+  <div class="search">
+    <input id="q" type="text" inputmode="numeric" placeholder="영상 번호 (예: 12)" aria-label="영상 번호">
+    <button type="button" onclick="document.getElementById('q').value='';show()">전체</button>
+  </div>
+  <div id="list"></div>
+</main>
+<footer>영상 끝에 나온 No.번호로 찾아보세요 · 갱신 2026-10-25</footer>
+<script>
+const DATA = [];
+function esc(s) { return s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function show() {
+  const q = document.getElementById('q').value.replace(/[^0-9]/g, '');
+  const rows = DATA.filter(v => !q || Number(v.no) === Number(q));
+  const box = document.getElementById('list');
+  if (!rows.length) { box.innerHTML = '<div class="empty">' + (q ? 'No.' + esc(q) + ' 영상에 연결된 상품이 없어요' : '아직 연결된 상품이 없어요') + '</div>'; return; }
+  box.innerHTML = rows.map(v => '<section class="video"><h2>No.' + esc(v.no) + '</h2>' +
+    v.items.map(i => '<a class="item" href="' + esc(i.link) + '" target="_blank" rel="sponsored noopener">' + esc(i.name) +
+      '<span>쿠팡에서 보기 →</span></a>').join('') + '</section>').join('');
+}
+document.getElementById('q').addEventListener('input', show);
+show();
+</script>
+</body>
+</html>
